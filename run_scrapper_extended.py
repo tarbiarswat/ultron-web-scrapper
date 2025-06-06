@@ -2,8 +2,11 @@ from fetch_reddit import get_reddit_client, search_posts
 from fetch_pushshift import fetch_pushshift
 from save_data_extended import save_to_csv
 from logger import setup_logger
+from tracker import log_activity
 
 logger = setup_logger()
+log_activity("Script started", "run_scraper")
+
 client = get_reddit_client()
 
 keywords = [
@@ -14,20 +17,20 @@ keywords = [
 all_posts = []
 
 logger.info("🔍 Starting Reddit + Pushshift data scraping...")
+log_activity("Started scraping", "run_scraper", f"Keywords: {', '.join(keywords)}")
 
-# Reddit API scrape
+# Reddit API
 for kw in keywords:
     logger.info(f"📦 Searching Reddit API: {kw}")
     results = search_posts(client, kw, limit=200)
     all_posts.extend(results)
 
-# Pushshift scrape
+# Pushshift
 for kw in keywords:
     logger.info(f"📦 Searching Pushshift: {kw}")
     data = fetch_pushshift(kw, size=200)
     for item in data:
-        class Dummy:
-            pass
+        class Dummy: pass
         p = Dummy()
         p.title = item.get("title", "")
         p.selftext = item.get("selftext", "")
@@ -40,5 +43,7 @@ for kw in keywords:
         all_posts.append(p)
 
 logger.info(f"🔎 Total posts fetched before filtering: {len(all_posts)}")
+log_activity("Fetched all posts", "run_scraper", f"Total posts: {len(all_posts)}")
 
 save_to_csv(all_posts, logger)
+log_activity("Script finished", "run_scraper")

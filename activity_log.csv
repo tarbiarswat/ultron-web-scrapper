@@ -1,0 +1,8 @@
+Timestamp,Action,Source,Notes
+2025-06-05 20:26:40,Script started,run_scraper,
+2025-06-05 20:26:40,Started scraping,run_scraper,"Keywords: technostress, tech fatigue, digital burnout, technology stress, screen anxiety, remote work stress"
+2025-06-05 20:27:07,Fetched all posts,run_scraper,Total posts: 1184
+2025-06-05 20:27:15,Filtering complete,save_data,552 kept / 632 skipped
+2025-06-05 20:27:15,Saved error log,save_data,File: error_log.csv
+2025-06-05 20:27:15,Saved filtered posts,save_data,File: technostress_posts.csv
+2025-06-05 20:27:15,Script finished,run_scraper,
