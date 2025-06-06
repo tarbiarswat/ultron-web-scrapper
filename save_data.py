@@ -1,4 +1,5 @@
 import pandas as pd
+from langdetect import detect
 
 def clean_and_filter(submissions):
     filtered = []
@@ -6,15 +7,22 @@ def clean_and_filter(submissions):
         title = post.title.lower()
         selftext = post.selftext.lower()
 
-        # Filtering conditions
+        # Filter conditions
         if (
             "study" in title or "interview" in title or
             "study" in selftext or "interview" in selftext or
-            "survey" in title or "academic" in title or
-            "survey" in selftext or "academic" in selftext or
-            len(post.selftext.strip()) < 150
+            len(selftext.strip()) < 150 or
+            post.score < 5 or
+            post.num_comments < 3
         ):
-            continue  # skip this post
+            continue
+
+        # Language detection
+        try:
+            if detect(selftext) != "en":
+                continue
+        except:
+            continue
 
         filtered.append(post)
 
@@ -35,3 +43,4 @@ def save_to_csv(submissions, filename="technostress_posts.csv"):
     } for post in filtered_submissions]
 
     pd.DataFrame(data).to_csv(filename, index=False)
+    print(f"✅ Saved {len(filtered_submissions)} posts to {filename}")
